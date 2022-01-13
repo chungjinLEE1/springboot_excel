@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Upload Excel File to MySQL</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>-->
+
+    <script th:src="@{/assets/js/jquery/jquery-3.5.0.min.js}"></script>
+    <script th:src="@{/assets/js/jquery/jquery-ui.min.js}" ></script>
+    <script th:src="@{/assets/js/libs/axios.min.js}"></script>
+
+</head>
+
+<body>
+<div class="container h-100">
+    <div class="h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-sm-5">
+                <h3>Upload Excel File to MySQL</h3>
+                <form method="GET" enctype="multipart/form-data" id="fileUploadForm">
+                    <div class="form-group">
+                        <label class="control-label" for="uploadfile">Upload File:</label>
+                        <input type="file" class="form-control" id="uploadfile" placeholder="Upload File"  name="uploadfile"></input>
+                    </div>
+                    <button type="submit" class="btn btn-default" id="btnSubmit">Upload</button>
+                </form>
+                <div th:if="${message}">
+                    <span th:text="${message}"/>
+                    <a href="/file">Download Excel File from h2 db</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        /*[+
+         var postUrl = [[@{/actions/postForm(
+         additionalParam=${#httpServletRequest.getParameter('additionalParam')}
+         )}]];
+         +]*/
+        $("#btnSubmit").submit(function (e) {
+            e.preventDefault();
+            $.post(postUrl,
+                $(this).serialize(),
+                function (response) {
+                    var isErr = 'hasError';
+                    // when there are an error then show error
+                    if (response.indexOf(isErr) > -1) {
+                        $("#btnSubmit").html(response);
+                    } else {
+                        var formData = $("#btnSubmit").serializeArray(),
+                            len = formData.length,
+                            urlEnd = '';
+                        for (i = 0; i < len; i++) {
+                            urlEnd += formData[i].name + '=' + encodeURIComponent(formData[i].value) + '&';
+                        }
+
+                        /*[+
+                         var urlReplacement = [[@{/another/page(
+                         additionalParam=${#httpServletRequest.getParameter('additionalParam')}
+                         )}]] + urlEnd;
+                         +]*/
+
+                        window.location.replace(urlReplacement);
+                    }
+                }
+            );
+            return false;
+        });
+    });
+    /*]]>*/
+</script>
+
+</body>
+</html>

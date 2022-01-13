@@ -1,0 +1,47 @@
+server:
+  port : 8080
+
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding : UTF-8
+    cache: false  # false : 서버를 재시작할 필요없이 새로고침만으로 반영이 된다.
+    check-template-location: true
+    check-template: true
+    enable: true
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  mvc:
+    contentnegotiation:
+      favor-parameter: true
+      favor-path-extension: true
+      media-types:
+        xsl : application/vnd.ms-excel
+  datasource:
+#    url: jdbc:h2:mem:test
+    url: jdbc:h2:tcp://localhost/~/test
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 1234
+    initialization-mode: always
+#    schema: 'classpath:sql/schema/schema1.sql,classpath:sql/schema/schema2.sql'
+#    data: 'classpath:sql/my/data1.sql,classpath:sql/my/data2.sql'
+  h2:
+    console:
+    enabled: true
+    path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
